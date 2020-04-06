@@ -1,5 +1,5 @@
 class Pokemon:
-    # create a pokemon, give it a name, type, and level. Its max health is determined by its level. Its starting health is its max health and it is not knocked out when it starts.
+    # create a pokemon, give it a name, type, and level. Its max health is determined by its level. Its starting health is max and not knocked out when it starts
     def __init__(self, name, type, level = 5):
         self.name = name
         self.level = level
@@ -10,37 +10,37 @@ class Pokemon:
 
 
     def __repr__(self):
-        # Printing a pokemon will tell its name, its type, its level and how much health it has remaining
+        # Printing a pokemon's name, type, level and health remaining
         return "This level {level} {name} has {health} hit points remaining. They are a {type} type Pokemon".format(level = self.level, name = self.name, health=self.health, type = self.type)
 
     def revive(self):
         # Reviving a pokemon will flip it's status to False
         self.is_knocked_out = False
-        # A revived pokemon can't have 0 health. This is a safety precaution. revive() should only be called if the pokemon was given some health, but if it somehow has no health, its health gets set to 1.
+        # A revived pokemon can't have 0 health. revive() should only be called if the pokemon was given some health, but if it somehow has no health, its health gets set to 1
         if self.health == 0:
             self.health = 1
         print("{name} was revived!".format(name = self.name))
 
     def knock_out(self):
-        # Knocking out a pokemon will flip its status to True.
+        # Knocking out a pokemon will flip its status to True
         self.is_knocked_out = True
-        # A knocked out pokemon can't have any health. This is a safety precaution. knock_out() should only be called if heath was set to 0, but if somehow the pokemon had health left, it gets set to 0.
+        # A knocked out pokemon can't have any health. knock_out() should only be called if heath was set to 0, but if somehow the pokemon had health left, it gets set to 0
         if self.health != 0:
             self.health = 0
         print("{name} was knocked out!".format(name = self.name))
 
     def lose_health(self, amount):
-        # Deducts heath from a pokemon and prints the current health remaining
+        # Deducts health from a pokemon and prints the current health remaining
         self.health -= amount
         if self.health <= 0:
-            #Makes sure the health doesn't become negative. Knocks out the pokemon.
+            #Makes sure the health doesn't become negative. Knocks out the pokemon
             self.health = 0
             self.knock_out()
         else:
             print("{name} now has {health} health.".format(name = self.name, health = self.health))
 
     def gain_health(self, amount):
-        # Adds to a pokemon's heath
+        # Adds to a pokemon's health
         # If a pokemon goes from 0 heath, then revive it
         if self.health == 0:
             self.revive()
@@ -71,7 +71,7 @@ class Pokemon:
             other_pokemon.lose_health(self.level * 2)
 
 
-# Three classes that are subclasses of Pokemon. Charmander is a fire type, Squirtle is a Water type, and Bulbasaur is a Grass type.
+# Three classes that are subclasses of Pokemon. Charmander is a fire type, Squirtle is a Water type, and Bulbasaur is a Grass type
 class Charmander(Pokemon):
     def __init__(self, level = 5):
         super().__init__("Charmander", "Fire", level)
@@ -85,7 +85,7 @@ class Bulbasaur(Pokemon):
         super().__init__("Bulbasaur", "Grass", level)
 
 class Trainer:
-    # A trainer has a list of pokemon, a number of potions and a name. When the trainer gets created, the first pokemon in their list of pokemons is the active pokemon (number 0)
+    # trainer has a list of pokemon, number of potions and a name. When trainer is created, the first pokemon in their list of pokemons is the active pokemon (number 0)
     def __init__(self, pokemon_list, num_potions, name):
         self.pokemons = pokemon_list
         self.potions = num_potions
@@ -93,7 +93,7 @@ class Trainer:
         self.name = name
 
     def __repr__(self):
-        # Prints the name of the trainer, the pokemon they currently have, and the current active pokemon.
+        # Prints name of the trainer, pokemon they currently have, and current active pokemon
         print("The trainer {name} has the following pokemon".format(name = self.name))
         for pokemon in self.pokemons:
             print(pokemon)
@@ -101,36 +101,36 @@ class Trainer:
 
     def switch_active_pokemon(self, new_active):
         # Switches the active pokemon to the number given as a parameter
-        # First checks to see the number is valid (between 0 and the length of the list)
+        # First checks the number is valid (between 0 and the length of the list)
         if new_active < len(self.pokemons) and new_active >= 0:
-            # You can't switch to a pokemon that is knocked out
+            # can't switch to a pokemon that is knocked out
             if self.pokemons[new_active].is_knocked_out:
                 print("{name} is knocked out. You can't make it your active pokemon".format(name = self.pokemons[new_active].name))
-            # You can't switch to your current pokemon
+            # can't switch to your current pokemon
             elif new_active == self.current_pokemon:
                 print("{name} is already your active pokemon".format(name = self.pokemons[new_active].name))
-            # Switches the pokemon
+            # Switch the pokemon
             else:
                 self.current_pokemon = new_active
                 print("Go {name}, it's your turn!".format(name = self.pokemons[self.current_pokemon].name))
 
     def use_potion(self):
-        # Uses a potion on the active pokemon, assuming you have at least one potion.
+        # Uses a potion on the active pokemon, if having at least one potion.
         if self.potions > 0:
             print("You used a potion on {name}.".format(name = self.pokemons[self.current_pokemon].name))
-            # A potion restores 20 health
+            # potion restores 20 health
             self.pokemons[self.current_pokemon].gain_health(20)
             self.potions -= 1
         else:
             print("You don't have any more potions")
 
     def attack_other_trainer(self, other_trainer):
-        # Your current pokemon attacks the other trainer's current pokemon
+        # current pokemon attacks the other trainer's current pokemon
         my_pokemon = self.pokemons[self.current_pokemon]
         their_pokemon = other_trainer.pokemons[other_trainer.current_pokemon]
         my_pokemon.attack(their_pokemon)
 
-# Six pokemon are made with different levels. (If no level is given, it is level 5)
+# 6 pokemon are made with different levels (If no level, then level 5)
 a = Charmander(7)
 b = Squirtle()
 c = Squirtle(1)
@@ -139,14 +139,14 @@ e = Charmander()
 f = Squirtle(2)
 
 
-#Two trainers are created. The first three pokemon are given to trainer 1, the second three are given to trainer 2.
+#Two trainers are created. The first three pokemon to trainer 1, next three to trainer 2
 trainer_one = Trainer([a,b,c], 3, "Alex")
 trainer_two = Trainer([d,e,f], 5, "Sara")
 
 print(trainer_one)
 print(trainer_two)
 
-# Testing attacking, giving potions, and switching pokemon.
+# Testing attacking, potions and switching pokemon
 trainer_one.attack_other_trainer(trainer_two)
 trainer_two.attack_other_trainer(trainer_one)
 trainer_two.use_potion()
